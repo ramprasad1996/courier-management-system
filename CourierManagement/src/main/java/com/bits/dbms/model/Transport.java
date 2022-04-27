@@ -15,6 +15,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "transport")
 public class Transport {
 	
+	public List<Orders> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Orders> orders) {
+		this.orders = orders;
+	}
+
 	/**
 	 * 
 	 */
@@ -93,6 +101,6 @@ public class Transport {
 	
 	@OneToMany(mappedBy = "transportId" ,cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
-	private List<Orders> orders;
+	public List<Orders> orders;
 
 }

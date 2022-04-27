@@ -2,19 +2,34 @@ package com.bits.dbms.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Entity
 @Table(name = "orders")
+@DynamicUpdate
+@JsonInclude(value = Include.NON_NULL)
 public class Orders {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int orderId;
 	
 	String customerId;
@@ -34,6 +49,16 @@ public class Orders {
 	String recipient;
 	
 	String contactId;
+	
+	String deliveryStatus;
+
+	public String getDeliveryStatus() {
+		return deliveryStatus;
+	}
+
+	public void setDeliveryStatus(String deliveryStatus) {
+		this.deliveryStatus = deliveryStatus;
+	}
 
 	public int getOrderId() {
 		return orderId;
@@ -151,5 +176,16 @@ public class Orders {
 		this.srcBranchId = srcBranchId;
 	}
 	
+	@OneToOne(mappedBy = "orders" ,cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
+	public Invoice invoice;
+
+	public Invoice getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(Invoice invoice) {
+		this.invoice = invoice;
+	}
 	
 }
